@@ -1,4 +1,5 @@
 ﻿using AdventOfCode2023.Day1;
+using AdventOfCode2023.Day2;
 using AdventOfCode2023.Day7;
 using AdventOfCode2023.Day8;
 
@@ -25,6 +26,9 @@ namespace AdventOfCode2023
             {
                 case 1:
                     Console.WriteLine(await Trebuchet.SumCalibrationValues());
+                    break;
+                case 2:
+                    Console.WriteLine(await CubeConundrum.GetSumOfValidGameIds());
                     break;
                 case 7:
                     Console.WriteLine(await CamelCards.GetTotalWinnings());
