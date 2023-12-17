@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace AdventOfCode2023.Day2
 {
-    public record Game (int Id, IEnumerable<CubePull> CubePulls);
+    public record Game(int Id, IEnumerable<CubePull> CubePulls);
+
     public record CubePull(int RedCubesCount, int BlueCubesCount, int GreenCubesCount);
 
     public static class CubeConundrum
@@ -20,7 +21,7 @@ namespace AdventOfCode2023.Day2
             var games = new List<Game>();
 
             var gameRecords = await File.ReadAllLinesAsync("./Day2/GameRecord.txt");
-            
+
             foreach (var gameRecord in gameRecords)
             {
                 var splitGameRecord = gameRecord.Split(": ");
@@ -73,15 +74,18 @@ namespace AdventOfCode2023.Day2
             {
                 var valid = true;
 
-                foreach(var pull in game.CubePulls)
+                foreach (var pull in game.CubePulls)
                 {
-                    if (pull.RedCubesCount > MaxRedCubes || pull.BlueCubesCount > MaxBlueCubes || pull.GreenCubesCount > MaxGreenCubes)
+                    if (
+                        pull.RedCubesCount > MaxRedCubes
+                        || pull.BlueCubesCount > MaxBlueCubes
+                        || pull.GreenCubesCount > MaxGreenCubes
+                    )
                         valid = false;
                 }
-                
+
                 if (valid)
                     validGames.Add(game);
-
             }
 
             return validGames;
@@ -97,7 +101,7 @@ namespace AdventOfCode2023.Day2
                 var minBlueCount = 0;
                 var minGreenCount = 0;
 
-                foreach(var pull in game.CubePulls)
+                foreach (var pull in game.CubePulls)
                 {
                     if (pull.RedCubesCount > minRedCount)
                         minRedCount = pull.RedCubesCount;
@@ -109,7 +113,7 @@ namespace AdventOfCode2023.Day2
                         minGreenCount = pull.GreenCubesCount;
                 }
 
-                sumOfPowerOfGames  += minRedCount * minBlueCount * minGreenCount;
+                sumOfPowerOfGames += minRedCount * minBlueCount * minGreenCount;
             }
 
             return sumOfPowerOfGames;
@@ -123,7 +127,7 @@ namespace AdventOfCode2023.Day2
 
             var sumValidGameIds = validGames.Sum(g => g.Id);
 
-            var sumOfPowerOfGames =  GetSumOfPowerOfGames(games);
+            var sumOfPowerOfGames = GetSumOfPowerOfGames(games);
 
             return sumOfPowerOfGames;
         }

@@ -65,9 +65,7 @@ namespace AdventOfCode2023.Day7
                 {
                     var count = hand.Value.Count(h => h == label);
 
-                    
-
-                    if (hand.Type == HandType.OnePair )
+                    if (hand.Type == HandType.OnePair)
                     {
                         hand.Type = count switch
                         {
@@ -76,7 +74,7 @@ namespace AdventOfCode2023.Day7
                             _ => hand.Type
                         };
                     }
-                    else if (hand.Type == HandType.ThreeOfAKind )
+                    else if (hand.Type == HandType.ThreeOfAKind)
                     {
                         hand.Type = count switch
                         {
@@ -86,7 +84,8 @@ namespace AdventOfCode2023.Day7
                     }
                     else if (count > ((int)hand.Type - 1))
                     {
-                        hand.Type = count switch {
+                        hand.Type = count switch
+                        {
                             5 => HandType.FiveOfAKind,
                             4 => HandType.FourOfAKind,
                             3 => HandType.ThreeOfAKind,
@@ -94,7 +93,6 @@ namespace AdventOfCode2023.Day7
                             _ => hand.Type
                         };
                     }
-
                 }
 
                 //Part Two
@@ -106,7 +104,8 @@ namespace AdventOfCode2023.Day7
                     if (hand.Type == HandType.FourOfAKind)
                     {
                         hand.Type = HandType.FiveOfAKind;
-                    }else if(hand.Type == HandType.ThreeOfAKind)
+                    }
+                    else if (hand.Type == HandType.ThreeOfAKind)
                     {
                         hand.Type = jokerCount switch
                         {
@@ -141,7 +140,6 @@ namespace AdventOfCode2023.Day7
                             _ => hand.Type
                         };
                     }
-
                 }
             }
 
@@ -151,7 +149,7 @@ namespace AdventOfCode2023.Day7
         private static int SumTotalHands(IEnumerable<Hand> hands)
         {
             var totalSum = 0;
-            for(var i = 0; i < hands.Count(); i++)
+            for (var i = 0; i < hands.Count(); i++)
             {
                 var hand = hands.ElementAt(i);
                 totalSum += hand.Bet * (i + 1);
@@ -168,7 +166,7 @@ namespace AdventOfCode2023.Day7
             var totalWinnings = SumTotalHands(hands);
             return totalWinnings;
         }
-        
+
         private static int LabelToValue(char label) =>
             label switch
             {
@@ -188,8 +186,7 @@ namespace AdventOfCode2023.Day7
                 _ => throw new ArgumentException("Invalid character")
             };
 
-
-        internal class Hand 
+        internal class Hand
         {
             public string Value { get; set; } = null!;
             public int Bet { get; set; }
@@ -227,6 +224,5 @@ namespace AdventOfCode2023.Day7
                 }
             }
         }
-
     }
 }
