@@ -149,7 +149,7 @@ namespace AdventOfCode2023.Day3
 
             var gearRations = GetGearRatios(engineSchematic);
 
-            return gearRatios;
+            return gearRations;
         }
     }
 }
