@@ -243,118 +243,19 @@ namespace AdventOfCode2023.Day5
             foreach (var srcRange in srcRanges)
             {
                 var mappedSrcRanges = new List<MapRange>();
+                var unMappedRanges = new List<(long Start, long Length)>();
+                var mappingWork = GetMappedRanges(map.Ranges.ToList(), srcRange);
+                unMappedRanges.AddRange(mappingWork.UnMappedRanges);
+                mappedSrcRanges.AddRange(mappingWork.MappedRanges);
 
-                foreach (var range in map.Ranges)
+                while (unMappedRanges.Count > 0)
                 {
-                    var mSrcStart = range.SourceRangeStart;
-                    var iSrcStart = srcRange.Start;
-                    var mDestStart = range.DestinationRangeStart;
-
-                    var mSrcLimit = mSrcStart + range.RangeLength;
-                    var iSrcLimit = iSrcStart + srcRange.Length;
-
-                    if (mSrcStart == iSrcStart && iSrcLimit == mSrcLimit)
-                    {
-                        mappedSrcRanges.Add(new(mDestStart, iSrcStart, srcRange.Length));
-                        break;
-                    }
-                    else if (mSrcStart == iSrcStart && iSrcLimit > mSrcLimit)
-                    {
-                        mappedSrcRanges.Add(new(mDestStart, iSrcStart, mSrcLimit - iSrcStart));
-                        mappedSrcRanges.Add(new(mSrcLimit, mSrcLimit, iSrcLimit - mSrcLimit));
-                        break;
-                    }
-                    else if (mSrcStart == iSrcStart && iSrcLimit < mSrcLimit)
-                    {
-                        mappedSrcRanges.Add(new(mDestStart, iSrcStart, iSrcLimit - iSrcStart));
-                        break;
-                    }
-                    else if (mSrcStart < iSrcStart && iSrcLimit == mSrcLimit)
-                    {
-                        var offset = iSrcStart - mSrcStart;
-                        mappedSrcRanges.Add(
-                            new(mDestStart + offset, iSrcStart, iSrcLimit - iSrcStart)
-                        );
-                        mappedSrcRanges.Add(new(mSrcStart, mSrcStart, iSrcStart - mSrcStart));
-                        break;
-                    }
-                    else if (mSrcStart > iSrcStart && iSrcLimit == mSrcLimit)
-                    {
-                        mappedSrcRanges.Add(new(mDestStart, mSrcStart, range.RangeLength));
-                        mappedSrcRanges.Add(new(iSrcStart, iSrcStart, mSrcStart - iSrcStart));
-                        break;
-                    }
-                    else if (mSrcStart < iSrcStart && iSrcLimit < mSrcLimit)
-                    {
-                        var offset = iSrcStart - mSrcStart;
-                        mappedSrcRanges.Add(new(mDestStart + offset, iSrcStart, srcRange.Length));
-                        break;
-                    }
-                    else if (
-                        mSrcStart > iSrcStart
-                        && mSrcStart > iSrcLimit
-                        && iSrcLimit < mSrcLimit
-                    )
-                    {
-                        mappedSrcRanges.Add(new(mDestStart, mSrcStart, iSrcLimit - mSrcStart));
-                        mappedSrcRanges.Add(new(iSrcStart, iSrcStart, mSrcStart - iSrcStart));
-                        break;
-                    }
-                    else if (
-                        mSrcStart < iSrcStart
-                        && iSrcStart > mSrcLimit
-                        && iSrcLimit > mSrcLimit
-                    )
-                    {
-                        var offset = iSrcStart - mSrcStart;
-
-                        mappedSrcRanges.Add(
-                            new(mDestStart + offset, iSrcStart, mSrcLimit - iSrcStart)
-                        );
-                        mappedSrcRanges.Add(new(mSrcLimit, mSrcLimit, iSrcLimit - mSrcLimit));
-                        break;
-                    }
-
-                    if (mSrcStart <= iSrcStart && iSrcLimit <= mSrcLimit)
-                    {
-                        var diff = iSrcStart - mSrcStart;
-                        mappedSrcRanges.Add(new(mDestStart + diff, iSrcStart, srcRange.Length));
-                        break;
-                    }
-                    else if (
-                        mSrcStart <= iSrcStart
-                        && iSrcStart < mSrcLimit
-                        && iSrcLimit >= mSrcLimit
-                    )
-                    {
-                        var diff = iSrcStart - mSrcStart;
-                        mappedSrcRanges.Add(
-                            new(mDestStart + diff, iSrcStart, mSrcLimit - iSrcStart)
-                        );
-                        mappedSrcRanges.Add(new(mSrcLimit, mSrcLimit, iSrcLimit - mSrcLimit));
-                        break;
-                    }
-                    else if (mSrcStart >= iSrcStart && iSrcLimit >= mSrcLimit)
-                    {
-                        mappedSrcRanges.Add(new(mDestStart, mSrcStart, range.RangeLength));
-                        mappedSrcRanges.Add(new(iSrcStart, iSrcStart, mSrcStart - iSrcStart));
-                        mappedSrcRanges.Add(new(mSrcLimit, mSrcLimit, iSrcLimit - mSrcLimit));
-                        break;
-                    }
-                    else if (
-                        mSrcStart >= iSrcStart
-                        && mSrcStart < iSrcLimit
-                        && iSrcLimit <= mSrcLimit
-                    )
-                    {
-                        mappedSrcRanges.Add(new(mDestStart, mSrcStart, iSrcLimit - mSrcStart));
-                        mappedSrcRanges.Add(new(iSrcStart, iSrcStart, mSrcStart - iSrcStart));
-                        break;
-                    }
+                    var firstUnmappedRange = unMappedRanges.First();
+                    mappingWork = GetMappedRanges(map.Ranges.ToList(), firstUnmappedRange);
+                    unMappedRanges.Remove(firstUnmappedRange);
+                    unMappedRanges.AddRange(mappingWork.UnMappedRanges);
+                    mappedSrcRanges.AddRange(mappingWork.MappedRanges);
                 }
-
-                if (mappedSrcRanges.Count == 0)
-                    mappedSrcRanges.Add(new(srcRange.Start, srcRange.Start, srcRange.Length));
 
                 finalMappedSrcRanges.AddRange(mappedSrcRanges);
             }
@@ -363,6 +264,59 @@ namespace AdventOfCode2023.Day5
             //    mappedSrc = new(src, src);
 
             return finalMappedSrcRanges;
+        }
+
+        private static (
+            List<MapRange> MappedRanges,
+            List<(long Start, long Length)> UnMappedRanges
+        ) GetMappedRanges(List<MapRange> Ranges, (long Start, long Length) UnMappedRange)
+        {
+            var mappedSrcRanges = new List<MapRange>();
+            var unMappedRanges = new List<(long Start, long Length)>();
+
+            foreach (var range in Ranges)
+            {
+                var mSrcStart = range.SourceRangeStart;
+                var iSrcStart = UnMappedRange.Start;
+                var mDestStart = range.DestinationRangeStart;
+
+                var mSrcLimit = mSrcStart + range.RangeLength;
+                var iSrcLimit = iSrcStart + UnMappedRange.Length;
+
+                if (mSrcStart <= iSrcStart && iSrcLimit <= mSrcLimit)
+                {
+                    var diff = iSrcStart - mSrcStart;
+                    mappedSrcRanges.Add(new(mDestStart + diff, iSrcStart, UnMappedRange.Length));
+                    break;
+                }
+                else if (mSrcStart <= iSrcStart && iSrcStart < mSrcLimit && iSrcLimit >= mSrcLimit)
+                {
+                    var diff = iSrcStart - mSrcStart;
+                    mappedSrcRanges.Add(new(mDestStart + diff, iSrcStart, mSrcLimit - iSrcStart));
+                    unMappedRanges.Add(new(mSrcLimit, iSrcLimit - mSrcLimit));
+                    break;
+                }
+                else if (mSrcStart >= iSrcStart && iSrcLimit >= mSrcLimit)
+                {
+                    mappedSrcRanges.Add(new(mDestStart, mSrcStart, range.RangeLength));
+                    unMappedRanges.Add(new(iSrcStart, mSrcStart - iSrcStart));
+                    unMappedRanges.Add(new(mSrcLimit, iSrcLimit - mSrcLimit));
+                    break;
+                }
+                else if (mSrcStart >= iSrcStart && mSrcStart < iSrcLimit && iSrcLimit <= mSrcLimit)
+                {
+                    mappedSrcRanges.Add(new(mDestStart, mSrcStart, iSrcLimit - mSrcStart));
+                    unMappedRanges.Add(new(iSrcStart, mSrcStart - iSrcStart));
+                    break;
+                }
+            }
+
+            if (mappedSrcRanges.Count == 0)
+                mappedSrcRanges.Add(
+                    new(UnMappedRange.Start, UnMappedRange.Start, UnMappedRange.Length)
+                );
+
+            return new(mappedSrcRanges, unMappedRanges);
         }
 
         public static async Task<long> GetLowestLocationNumber()
