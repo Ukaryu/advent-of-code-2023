@@ -23,6 +23,9 @@
     <None Update="Day5\Almanac.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Day6\RaceRecords.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Day7\Hands.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
