@@ -6,7 +6,7 @@ using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AdventOfCode2023.Day7
+namespace AdventOfCode2023
 {
     public static class CamelCards
     {

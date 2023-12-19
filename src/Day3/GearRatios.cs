@@ -4,10 +4,10 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AdventOfCode2023.Day2;
+using AdventOfCode2023;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace AdventOfCode2023.Day3
+namespace AdventOfCode2023
 {
     public static class GearRatios
     {

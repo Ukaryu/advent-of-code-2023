@@ -7,7 +7,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AdventOfCode2023.Day5
+namespace AdventOfCode2023
 {
     public static class FoodProduction
     {

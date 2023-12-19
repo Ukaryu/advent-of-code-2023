@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace AdventOfCode2023.Day9
+namespace AdventOfCode2023
 {
     public static class MirageMaintenance
     {

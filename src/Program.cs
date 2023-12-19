@@ -1,13 +1,4 @@
-﻿using AdventOfCode2023.Day1;
-using AdventOfCode2023.Day10;
-using AdventOfCode2023.Day2;
-using AdventOfCode2023.Day3;
-using AdventOfCode2023.Day4;
-using AdventOfCode2023.Day5;
-using AdventOfCode2023.Day6;
-using AdventOfCode2023.Day7;
-using AdventOfCode2023.Day8;
-using AdventOfCode2023.Day9;
+﻿using AdventOfCode2023;
 
 namespace AdventOfCode2023
 {
@@ -59,6 +50,9 @@ namespace AdventOfCode2023
                     break;
                 case 10:
                     Console.WriteLine(await PipeMaze.GetStepsFarthestFromStarting());
+                    break;
+                case 11:
+                    Console.WriteLine(await CosmicExpansion.GetSumOfShortestPathsBetweenGalaxies());
                     break;
                 default:
                     Console.WriteLine("No valid day chosen");

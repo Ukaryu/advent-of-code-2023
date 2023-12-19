@@ -5,7 +5,7 @@ using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AdventOfCode2023.Day1
+namespace AdventOfCode2023
 {
     public static class Trebuchet
     {

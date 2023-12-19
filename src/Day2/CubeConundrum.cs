@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AdventOfCode2023.Day2
+namespace AdventOfCode2023
 {
     public record Game(int Id, IEnumerable<CubePull> CubePulls);
 

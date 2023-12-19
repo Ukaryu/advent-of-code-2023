@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AdventOfCode2023.Day4
+namespace AdventOfCode2023
 {
     public static class Scratchcards
     {

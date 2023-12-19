@@ -5,9 +5,8 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using static AdventOfCode2023.Day7.CamelCards;
 
-namespace AdventOfCode2023.Day8
+namespace AdventOfCode2023
 {
     public static class HauntedWasteland
     {
