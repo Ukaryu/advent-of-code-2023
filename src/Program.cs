@@ -50,7 +50,7 @@ namespace AdventOfCode2023
                     Console.WriteLine(await CamelCards.GetTotalWinnings());
                     break;
                 case 8:
-                    await HauntedWasteland.GetRequiredSteps();
+                    Console.WriteLine(await HauntedWasteland.GetRequiredSteps());
                     break;
                 default:
                     Console.WriteLine("No valid day chosen");
