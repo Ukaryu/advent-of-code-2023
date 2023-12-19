@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Net.WebSockets;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
 
 namespace AdventOfCode2023
 {
@@ -14,76 +8,82 @@ namespace AdventOfCode2023
 
         private static async Task<IEnumerable<Galaxy>> ReadUniverse()
         {
-            var expandedUniverse = new List<string>();
-            var expansionRate = 2;
+            var expansionRate = 1000000;
+
             var universeLines = await File.ReadAllLinesAsync("./Day11/Universe.txt");
 
-            var expansionRow = new string(
-                Enumerable.Range(0, expansionRate).Select(i => '.').ToArray()
-            );
+            var indexesForColumnExpansion = GetIndexesForColumnExpansion(universeLines);
 
-            foreach (var universeLine in universeLines)
-            {
-                var expandedUniverseLine = "";
-                var indexesForExpansion = new List<int>();
-
-                for (int i = 0; i < universeLine.Length; i++)
-                {
-                    if (indexesForExpansion.Contains(i))
-                    {
-                        expandedUniverseLine += expansionRow;
-                        break;
-                    }
-
-                    var expand = true;
-
-                    foreach (var innerUniverseLine in universeLines)
-                    {
-                        if (innerUniverseLine[i] != '.')
-                        {
-                            expand = false;
-                            break;
-                        }
-                    }
-
-                    if (expand)
-                    {
-                        indexesForExpansion.Add(i);
-                        expandedUniverseLine += expansionRow;
-                    }
-                    else
-                    {
-                        expandedUniverseLine += universeLine[i];
-                    }
-                }
-
-                if (expandedUniverseLine.All(c => c == '.'))
-                    expandedUniverse.AddRange(
-                        Enumerable.Range(0, expansionRate).Select(i => expandedUniverseLine)
-                    );
-                else
-                    expandedUniverse.Add(expandedUniverseLine);
-            }
+            var indexesForRowExpansion = GetIndexesForRowExpansion(universeLines);
 
             var galaxies = new List<Galaxy>();
 
-            for (int y = 0; y < expandedUniverse.Count; y++)
+            for (int y = 0; y < universeLines.Length; y++)
             {
-                for (int x = 0; x < expandedUniverse.ElementAt(y).Length; x++)
+                for (int x = 0; x < universeLines.ElementAt(y).Length; x++)
                 {
-                    var symbol = expandedUniverse.ElementAt(y)[x];
+                    var symbol = universeLines.ElementAt(y)[x];
 
                     if (symbol == '#')
-                        galaxies.Add(new(galaxies.Count, new Point(x, y)));
+                    {
+                        var offsetX = indexesForColumnExpansion
+                            .Where(expX => expX < x)
+                            .Sum(expX => expansionRate - 1);
+
+                        var offsetY = indexesForRowExpansion
+                            .Where(expY => expY < y)
+                            .Sum(expY => expansionRate - 1);
+                        galaxies.Add(new(galaxies.Count, new Point(x + offsetX, y + offsetY)));
+                    }
                 }
             }
 
             return galaxies;
         }
 
-        private static IEnumerable<int> GetShortestPaths(IEnumerable<Galaxy> universe)
+        private static IEnumerable<int> GetIndexesForColumnExpansion(string[] universeLines)
         {
-            var shortestPaths = new List<int>();
+            var firstGalaxy = universeLines[0];
+            var indexesForExpansion = new List<int>();
+
+            for (int galaxyIdx = 0; galaxyIdx < firstGalaxy.Length; galaxyIdx++)
+            {
+                var expand = true;
+
+                foreach (var innerUniverseLine in universeLines)
+                {
+                    if (innerUniverseLine[galaxyIdx] != '.')
+                    {
+                        expand = false;
+                        break;
+                    }
+                }
+
+                if (expand)
+                    indexesForExpansion.Add(galaxyIdx);
+            }
+
+            return indexesForExpansion;
+        }
+
+        private static IEnumerable<int> GetIndexesForRowExpansion(string[] universeLines)
+        {
+            var indexesForExpansion = new List<int>();
+
+            for (int galaxyIdx = 0; galaxyIdx < universeLines.Length; galaxyIdx++)
+            {
+                var universeLine = universeLines[galaxyIdx];
+
+                if (universeLine.All(u => u == '.'))
+                    indexesForExpansion.Add(galaxyIdx);
+            }
+
+            return indexesForExpansion;
+        }
+
+        private static IEnumerable<long> GetShortestPaths(IEnumerable<Galaxy> universe)
+        {
+            var shortestPaths = new List<long>();
 
             for (int galaxyIdx = 0; galaxyIdx < universe.Count(); galaxyIdx++)
             {
@@ -111,7 +111,7 @@ namespace AdventOfCode2023
         private static int GetShortestPathBetweenPoints(Point dest, Point src) =>
             Math.Abs(dest.X - src.X) + Math.Abs(dest.Y - src.Y);
 
-        public static async Task<int> GetSumOfShortestPathsBetweenGalaxies()
+        public static async Task<long> GetSumOfShortestPathsBetweenGalaxies()
         {
             var universe = await ReadUniverse();
             var galaxy5 = universe.Where(g => g.Id == 7).First();
@@ -120,7 +120,7 @@ namespace AdventOfCode2023
 
             var shortestPaths = GetShortestPaths(universe);
 
-            var shortestPathsSum = shortestPaths.Sum();
+            long shortestPathsSum = shortestPaths.Sum();
             return shortestPathsSum;
         }
     }
