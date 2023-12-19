@@ -1,4 +1,5 @@
 ﻿using AdventOfCode2023.Day1;
+using AdventOfCode2023.Day10;
 using AdventOfCode2023.Day2;
 using AdventOfCode2023.Day3;
 using AdventOfCode2023.Day4;
@@ -55,6 +56,9 @@ namespace AdventOfCode2023
                     break;
                 case 9:
                     Console.WriteLine(await MirageMaintenance.GetSumOfExtrapolatedValues());
+                    break;
+                case 10:
+                    Console.WriteLine(await PipeMaze.GetStepsFarthestFromStarting());
                     break;
                 default:
                     Console.WriteLine("No valid day chosen");
