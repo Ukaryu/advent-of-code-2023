@@ -6,6 +6,7 @@ using AdventOfCode2023.Day5;
 using AdventOfCode2023.Day6;
 using AdventOfCode2023.Day7;
 using AdventOfCode2023.Day8;
+using AdventOfCode2023.Day9;
 
 namespace AdventOfCode2023
 {
@@ -51,6 +52,9 @@ namespace AdventOfCode2023
                     break;
                 case 8:
                     Console.WriteLine(await HauntedWasteland.GetRequiredSteps());
+                    break;
+                case 9:
+                    Console.WriteLine(await MirageMaintenance.GetSumOfExtrapolatedValues());
                     break;
                 default:
                     Console.WriteLine("No valid day chosen");
