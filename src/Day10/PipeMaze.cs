@@ -33,14 +33,17 @@ namespace AdventOfCode2023.Day10
 
             var currentTile = startTile;
 
+            var tilesInLoop = new HashSet<Tile>();
             var steps = 0;
 
             Tile previousTile = currentTile;
 
             do
             {
-                Tile? nextTile = null;
+                if (currentTile != null)
+                    tilesInLoop.Add(currentTile);
 
+                Tile? nextTile = null;
                 if (currentTile.Symbol == 'S')
                 {
                     if (nextTile == null)
@@ -89,7 +92,19 @@ namespace AdventOfCode2023.Day10
                 steps++;
             } while (currentTile != startTile);
 
-            return steps;
+            var points = tilesInLoop.Select(t => t.Coordinate).ToList();
+            points.Add(tilesInLoop.First().Coordinate);
+
+            var area = Math.Abs(
+                points
+                    .Take(points.Count - 1)
+                    .Select((p, i) => (points[i + 1].X - p.X) * (points[i + 1].Y + p.Y))
+                    .Sum() / 2
+            );
+
+            //After finding area, using Pick's theorem to get interior integer points (enclosed tiles)
+            var enclosedTiles = area + 1 - (tilesInLoop.Count / 2);
+            return enclosedTiles;
         }
 
         private static Tile? GetValidEastTile(IEnumerable<Tile> tiles, Point currCoord) =>
@@ -130,8 +145,9 @@ namespace AdventOfCode2023.Day10
         {
             var pipeTiles = await ReadPipeDiagram();
             var steps = GetSteps(pipeTiles);
+            var count = pipeTiles.Where(t => t.Symbol != '.').Count() - steps;
             var farthestPointAway = Math.Ceiling((double)steps / 2);
-            return farthestPointAway;
+            return steps;
         }
     }
 }
