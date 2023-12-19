@@ -54,6 +54,9 @@ namespace AdventOfCode2023
                 case 11:
                     Console.WriteLine(await CosmicExpansion.GetSumOfShortestPathsBetweenGalaxies());
                     break;
+                case 12:
+                    Console.WriteLine(await HotSprings.GetSumOfAmountOfPossibleArrangements());
+                    break;
                 default:
                     Console.WriteLine("No valid day chosen");
                     break;

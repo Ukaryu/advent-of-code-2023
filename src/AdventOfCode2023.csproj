@@ -14,6 +14,9 @@
     <None Update="Day11\Universe.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Day12\ConditionRecords.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Day1\CalibrationValues.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

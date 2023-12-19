@@ -114,9 +114,6 @@ namespace AdventOfCode2023
         public static async Task<long> GetSumOfShortestPathsBetweenGalaxies()
         {
             var universe = await ReadUniverse();
-            var galaxy5 = universe.Where(g => g.Id == 7).First();
-            var galaxy9 = universe.Where(g => g.Id == 8).First();
-            var sda = GetShortestPathBetweenPoints(galaxy9.Coordinate, galaxy5.Coordinate);
 
             var shortestPaths = GetShortestPaths(universe);
 
